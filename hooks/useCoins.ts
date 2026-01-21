@@ -2,25 +2,27 @@ import { useMemo } from "react";
 import useSWR from "swr";
 import { coinsFetcher } from "../src/fetchers/coinsFetcher";
 import { COINS_COINGECKO_API_URL } from "../constants/globals";
-import { Coin } from "../types/crypto";
+import { Coin } from "../types/coins";
 import { useSearch } from "./useSearch";
+import { COINS } from "../mock/coins";
 
 export function useCoins() {
-  const { data, error } = useSWR(COINS_COINGECKO_API_URL, coinsFetcher);
+  // const { data, error } = useSWR(COINS_COINGECKO_API_URL, coinsFetcher);
   const { search, onChange } = useSearch();
 
   const filteredCoins = useMemo(
     () =>
-      data?.filter((coin: Coin) =>
+      COINS?.filter((coin: Coin) =>
         coin.name.toLowerCase().includes(search.toLowerCase())
       ) as Coin[],
-    [data, search]
+    [search]
   );
 
+  // const isLoading = !error && !data;
+
   return {
-    data,
-    isLoading: !error && !data,
-    isError: error,
+    isLoading: false,
+    isError: null,
     filteredCoins,
     search,
     onChange,

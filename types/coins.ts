@@ -1,5 +1,13 @@
 export type CURRENCY = "EUR";
 
+export type Platform = {
+  id: number;
+  name: string;
+  symbol: string;
+  slug: string;
+  tokenAddress: string;
+};
+
 export type CoinInSnakeCase = {
   id: number;
   name: string;
@@ -50,7 +58,7 @@ export type Coin = {
   circulatingSupply: number;
   totalSupply: number;
   infiniteSupply: boolean;
-  platform: string | null;
+  platform: Platform | null;
   cmcRank: number;
   selfReportedCirculatingSupply: null | unknown;
   selfReportedMarketCap: null | unknown;

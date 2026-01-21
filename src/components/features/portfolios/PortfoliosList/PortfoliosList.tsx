@@ -17,7 +17,6 @@ export const PortfoliosList = () => {
     setPortfolioList,
     onCreatePortfolio,
     onDeletePortfolio,
-    getPortfolios,
     activePortfolio,
     handleActivePortfolioChange,
     onAddCoinToPortfolio,
@@ -32,9 +31,9 @@ export const PortfoliosList = () => {
   return (
     <Box mt="2rem">
       <Flex
-        flexDir={{ base: "column", md: "row" }}
+        flexDir={{ base: "column", lg: "row" }}
         justifyContent="space-between"
-        alignItems={{ md: "flex-start" }}
+        alignItems={{ lg: "flex-start" }}
       >
         <PortfolioStats />
         {portfolioList && portfolioList.length !== 0 ? (
@@ -42,8 +41,8 @@ export const PortfoliosList = () => {
             variant="primary"
             leftIcon={<Icon as={BiBookAdd} />}
             onClick={onOpen}
-            mt={{ base: "3rem", md: "0" }}
-            p="0.5rem 1rem"
+            mt={{ base: "1rem", lg: "0" }}
+            p="1.5rem 1rem"
           >
             Create Portfolio
           </Button>

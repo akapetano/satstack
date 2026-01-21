@@ -17,7 +17,7 @@ export const StatCard = ({ statTitle, amount, percentage }: IStatCardProps) => {
         textAlign="center"
       >
         <Text fontWeight="500" fontSize="lg" m={0}>
-          ${amount.toFixed(2)}
+          €{amount.toFixed(2)}
         </Text>
         <Box fontSize="sm" w="fit-content">
           <Text fontWeight="400" m={0} display="inline">

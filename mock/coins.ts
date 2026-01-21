@@ -1,4 +1,6 @@
-export const COINS = [
+import { Coin } from "../types/coins";
+
+export const COINS: Coin[] = [
   {
     id: 1,
     name: "Bitcoin",

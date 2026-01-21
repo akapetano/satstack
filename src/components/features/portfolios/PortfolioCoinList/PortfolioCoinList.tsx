@@ -74,7 +74,7 @@ export const PortfolioCoinList = ({
         <Flex
           flexDir={{ base: "column", md: "row" }}
           w="100%"
-          gap="5rem"
+          gap={{ base: "1rem", lg: "5rem" }}
           justifyContent="space-between"
           alignItems="center"
         >
@@ -85,12 +85,17 @@ export const PortfolioCoinList = ({
             handleActivePortfolioChange={handleActivePortfolioChange}
             onAddPortfolioModalOpen={onAddPortfolioModalOpen}
           />
-          <Flex gap="0.5rem">
+          <Flex
+            gap="0.5rem"
+            flexDirection={{ base: "column", lg: "row" }}
+            w={{ base: "100%", lg: "auto" }}
+          >
             <Button
               leftIcon={<BiTrash />}
               variant="danger-secondary"
               onClick={onDeletePortfolioModalOpen}
               px="1rem"
+              w={{ base: "100%", lg: "auto" }}
             >
               Delete Portfolio
             </Button>
@@ -99,6 +104,7 @@ export const PortfolioCoinList = ({
               variant="primary"
               onClick={onAddCoinModalOpen}
               px="1rem"
+              w={{ base: "100%", lg: "auto" }}
             >
               Add New Coin
             </Button>

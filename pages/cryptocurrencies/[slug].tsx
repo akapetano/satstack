@@ -6,7 +6,7 @@ import { Coin, CoinBySlug } from "../../types/coins";
 import { useAuth } from "../../hooks/useAuth";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await fetch("http://localhost:3000/api/top-ten");
+  const response = await fetch("https://localhost:3000/api/top-ten");
 
   const coins: Coin[] = await response.json();
 

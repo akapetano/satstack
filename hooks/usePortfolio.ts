@@ -8,12 +8,14 @@ import {
   convertCamelCaseToSnakeCase,
 } from "../utils";
 import { PortfolioCoin } from "../types/crypto";
+import { useError } from "./useError";
 
 interface IUsePortfolioProps {
   onClose: () => void;
 }
 
 export function usePortfolio({ onClose }: IUsePortfolioProps) {
+  const { handleError } = useError();
   const toast = useToast();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +42,7 @@ export function usePortfolio({ onClose }: IUsePortfolioProps) {
       portfolioList.find(
         (portfolio) => portfolio.portfolioName === eventTarget.innerText
       );
+    console.log({ newActivePortfolio });
     if (typeof newActivePortfolio === "undefined") {
       setActivePortfolio(null);
     } else {
@@ -61,6 +64,7 @@ export function usePortfolio({ onClose }: IUsePortfolioProps) {
           convertSnakeCaseToCamelCase(item)
         ) as Portfolio[];
         setPortfolioList(convertedData);
+        setActivePortfolio(convertedData[0]);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -209,50 +213,70 @@ export function usePortfolio({ onClose }: IUsePortfolioProps) {
     coinName: string,
     portfolioId: string
   ) => {
-    if (!coinId && !coinName) return null;
+    try {
+      if (!coinId && !coinName) {
+        return null;
+      }
 
-    const defaultCoinState = {
-      userId: user?.id,
-      portfolioId,
-      coinId,
-      coinName,
-      holdings: 0,
-    };
-    setActivePortfolioCoins((prevState) => {
-      if (
-        prevState !== null &&
-        Array.isArray(prevState) &&
-        prevState.some((coin) => coin.coinId !== coinId)
-      ) {
-        const nextCoins = [...prevState, { ...defaultCoinState }];
-        return nextCoins;
-      } else if (
-        prevState !== null &&
-        Array.isArray(prevState) &&
-        prevState.some((coin) => coin.coinId === coinId)
-      ) {
+      const defaultCoinState = {
+        userId: user?.id,
+        portfolioId,
+        coinId,
+        coinName,
+        holdings: 0,
+      };
+      setActivePortfolioCoins((prevState) => {
+        if (
+          prevState !== null &&
+          Array.isArray(prevState) &&
+          prevState.some((coin) => coin.coinId !== coinId)
+        ) {
+          const nextCoins = [...prevState, { ...defaultCoinState }];
+          return nextCoins;
+        } else if (
+          prevState !== null &&
+          Array.isArray(prevState) &&
+          prevState.some((coin) => coin.coinId === coinId)
+        ) {
+          toast({
+            position: "bottom",
+            title: "Duplicate coin",
+            description: `${
+              coinId.slice(0, 1).toUpperCase() + coinId.slice(1)
+            } already in portfolio, please select another coin.`,
+            status: "error",
+            duration: 4000,
+            isClosable: true,
+          });
+
+          return [...prevState];
+        } else {
+          return [{ ...defaultCoinState }];
+        }
+      });
+      const payload = convertCamelCaseToSnakeCase(defaultCoinState);
+      const { data: portfolioCoinsData, error } = await supabaseClient
+        .from("portfolio_coins")
+        .insert(payload);
+
+      if (error) {
+        throw new Error(error?.message);
+      }
+
+      await getPortfolioCoins(portfolioId);
+      return portfolioCoinsData;
+    } catch (error) {
+      if (error instanceof Error) {
         toast({
-          position: "bottom",
-          title: "Duplicate coin",
-          description: `${
-            coinId.slice(0, 1).toUpperCase() + coinId.slice(1)
-          } already in portfolio, please select another coin.`,
+          position: "top",
+          title: "Error!",
+          description: error?.message,
           status: "error",
           duration: 4000,
           isClosable: true,
         });
-
-        return [...prevState];
-      } else {
-        return [{ ...defaultCoinState }];
       }
-    });
-    const payload = convertCamelCaseToSnakeCase(defaultCoinState);
-    const { data: portfolioCoinsData, error } = await supabaseClient
-      .from("portfolio_coins")
-      .insert(payload);
-    await getPortfolioCoins(portfolioId);
-    return portfolioCoinsData;
+    }
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { Coin } from "../../../../../../types/crypto";
+import { Coin } from "../../../../../../types/coins";
 import {
   Modal,
   ModalOverlay,
@@ -63,7 +63,7 @@ export const AddCoinModal = ({
                     onClick={() => {
                       if (activePortfolioId) {
                         onAddCoinToPortfolio(
-                          coin.id,
+                          coin.id.toString(),
                           coin.name,
                           activePortfolioId
                         );
@@ -71,14 +71,14 @@ export const AddCoinModal = ({
                       onClose();
                     }}
                   >
-                    <Image
-                      loader={() => coin.image}
-                      src={coin.image}
+                    {/* <Image
+                      loader={() => coin.logo}
+                      src={coin.}
                       alt={coin.name}
                       height="30px"
                       width="30px"
                       unoptimized
-                    />
+                    /> */}
                     <Text>{coin.name}</Text>
                   </MenuItem>
                 ))
@@ -94,7 +94,7 @@ export const AddCoinModal = ({
                     onClick={() => {
                       if (activePortfolioId) {
                         onAddCoinToPortfolio(
-                          coin.id,
+                          coin.id.toString(),
                           coin.name,
                           activePortfolioId
                         );
@@ -102,14 +102,14 @@ export const AddCoinModal = ({
                       onClose();
                     }}
                   >
-                    <Image
+                    {/* <Image
                       loader={() => coin.image}
                       src={coin.image}
                       alt={coin.name}
                       height="30px"
                       width="30px"
                       unoptimized
-                    />
+                    /> */}
                     <Text>{coin.name}</Text>
                   </MenuItem>
                 ))}
