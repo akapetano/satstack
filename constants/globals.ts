@@ -1,1 +1,0 @@
-export const COINGECKO_API_URL = process.env.NEXT_PUBLIC_COINGECKO_API_URL;
